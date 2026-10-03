@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UsePipes, Param, Patch, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Post, UsePipes, Param, Patch, Delete, BadRequestException, Query } from '@nestjs/common';
 import { ConcertsService } from './concerts.service';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import { createConcertSchema, UpdateConcertSchema } from './concerts.schema';
@@ -13,6 +13,15 @@ export class ConcertsController {
     findAll() {
         return this.concertsService.findAll();
     }
+
+    @Get('search')
+    search(@Query('artist') artist: string) {
+        if (!artist) {
+            throw new BadRequestException('Query param "artist" is required');
+        }
+        return this.concertsService.search(artist);
+    }
+
 
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id: number) {

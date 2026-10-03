@@ -1,10 +1,10 @@
 import { Inject, Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { DRIZZLE } from '../db/db.module';
 import type { DrizzleDB } from '../db/db.module'; import { concerts } from '../db/schema';
-import { desc, eq } from 'drizzle-orm';
+import { desc, asc, eq, ilike } from 'drizzle-orm';
 import { CreateConcertDto } from './concerts.schema';
 import type { UpdateConcertDto } from './concerts.schema';
-import { asc } from 'drizzle-orm';
+
 
 @Injectable()
 export class ConcertsService {
@@ -34,6 +34,14 @@ export class ConcertsService {
         const [row] = await this.db.select().from(concerts).where(eq(concerts.id, id));
         if (!row) throw new NotFoundException(`Concert ${id} not found`);
         return row;
+    }
+
+    async search(artist: string) {
+        return this.db
+            .select()
+            .from(concerts)
+            .where(ilike(concerts.artist, `%${artist}`))
+            .orderBy(asc(concerts.date));
     }
 
     async update(id: number, dto: UpdateConcertDto) {
