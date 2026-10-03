@@ -1,0 +1,1 @@
+ALTER TABLE "concert_photos" ADD COLUMN "key" text NOT NULL;

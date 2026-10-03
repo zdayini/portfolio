@@ -18,6 +18,7 @@ export const concerts = pgTable('concerts', {
 export const concertPhotos = pgTable('concert_photos', {
     id: serial().primaryKey(),
     concert_id: integer().notNull().references(() => concerts.id, { onDelete: 'cascade' }),
+    key: text().notNull(),
     url: text(),
     is_public: boolean().default(true).notNull(),
     sort_order: smallint().default(0).notNull(),
