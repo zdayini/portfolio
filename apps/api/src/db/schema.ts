@@ -8,7 +8,7 @@ export const concerts = pgTable('concerts', {
     country: text().notNull(),
     date: date().notNull(),
     rating: smallint(),
-    notes: text(),
+    title: text(),
     image_url: text(),
     is_public: boolean().default(true).notNull(),
     created_at: timestamp({ withTimezone: true }).defaultNow().notNull(),

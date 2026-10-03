@@ -1,0 +1,1 @@
+ALTER TABLE "concerts" RENAME COLUMN "notes" TO "title";

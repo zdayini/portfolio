@@ -23,8 +23,6 @@ export class ConcertsController {
     create(@Body(new ZodValidationPipe(createConcertSchema)) dto: CreateConcertDto) {
         return this.concertsService.create(dto);
     }
-    // [/] add exclusion, if the date and artist is the same, it won't create a new one
-    // update the errors to be more specific (the date and artist already existed)
 
     @Patch(':id')
     update(

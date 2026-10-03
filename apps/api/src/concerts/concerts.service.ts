@@ -4,6 +4,7 @@ import type { DrizzleDB } from '../db/db.module'; import { concerts } from '../d
 import { desc, eq } from 'drizzle-orm';
 import { CreateConcertDto } from './concerts.schema';
 import type { UpdateConcertDto } from './concerts.schema';
+import { asc } from 'drizzle-orm';
 
 @Injectable()
 export class ConcertsService {
@@ -14,7 +15,7 @@ export class ConcertsService {
             .select()
             .from(concerts)
             .where(eq(concerts.is_public, true))
-            .orderBy(desc(concerts.date));
+            .orderBy(asc(concerts.date));
     }
 
     async create(dto: CreateConcertDto) {
@@ -22,7 +23,7 @@ export class ConcertsService {
             const [row] = await this.db.insert(concerts).values(dto).returning();
             return row;
         } catch (err: any) {
-            if (err.code === '23505') {
+            if (err.cause?.code === '23505') {
                 throw new ConflictException(`You've already logged ${dto.artist} on ${dto.date}`);
             }
             throw err;

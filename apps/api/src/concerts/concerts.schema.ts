@@ -7,7 +7,7 @@ export const createConcertSchema = z.object({
     country: z.string().min(1),
     date: z.iso.date(),
     rating: z.number().int().min(1).max(5).optional(),
-    notes: z.string().optional(),
+    title: z.string().optional(),
     image_url: z.url().optional(),
 });
 
