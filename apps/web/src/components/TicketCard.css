@@ -1,0 +1,90 @@
+.ticket-grid {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1rem, 2vw, 2rem);
+    padding: 2rem;
+    max-width: clamp(500px, 70vw, 1200px);
+    margin: 0 auto;
+}
+
+.ticket-card {
+    position: relative;
+    height: clamp(180px, 20vw, 320px);
+    aspect-ratio: 4 / 1;
+    width: auto;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    background-color: #1a1a1a;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+.ticket-card__overlay {
+    flex: 1;
+    padding: 1.25rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.8) 10%, rgba(0, 0, 0, 0.1));
+}
+
+/* Concert Title */
+.ticket-card__label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    opacity: 0.8;
+    margin: 0;
+}
+
+.ticket-card__artist {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.6rem, 3vw, 3rem);
+    letter-spacing: 1px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0.25rem 0;
+    color: beige;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.ticket-card__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-start;
+    max-width: 80%;
+}
+
+.ticket-card__date {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(0.85rem, 1.2vw, 1.3rem);
+    opacity: 0.85;
+    margin: 0;
+}
+
+.ticket-card__venue {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(0.85rem, 1.2vw, 1.3rem);
+    opacity: 0.7;
+    margin: 0;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.ticket-card__stub {
+    width: clamp(56px, 6vw, 90px);
+    background: #d0e7e5d9;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: clamp(0.9rem, 1.5vw, 1.4rem);
+    writing-mode: vertical-rl;
+    letter-spacing: 2px;
+}

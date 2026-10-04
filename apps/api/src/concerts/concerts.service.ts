@@ -102,7 +102,7 @@ export class ConcertsService {
             .select()
             .from(concertPhotos)
             .where(eq(concertPhotos.is_public, true))
-            .orderBy(asc(concertPhotos.concert_id), asc(concertPhotos.sort_order));
+            .orderBy(asc(concertPhotos.concert_id), asc(concertPhotos.created_at));
     }
 
 }
