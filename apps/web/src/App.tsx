@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getConcerts, getAllPhotos } from './lib/api';
 import { TicketCard } from './components/TicketCard';
 import './components/TicketCard.css';
+import { Link } from 'react-router-dom';
 
 function App() {
   const { data: concerts, isLoading: loadingConcerts } = useQuery({
@@ -27,16 +28,22 @@ function App() {
   return (
     <div className="ticket-grid">
       {concerts?.map((concert) => (
-        <TicketCard
+        <Link
           key={concert.id}
-          artist={concert.artist}
-          venue={concert.venue}
-          city={concert.city}
-          date={concert.date}
-          rating={concert.rating}
-          title={concert.title}
-          photo_url={photoByConcert.get(concert.id)}
-        />
+          to={`/concerts/${concert.id}`}
+          style={{ textDecoration: 'none', color: 'inherit' }}
+        >
+          <TicketCard
+            key={concert.id}
+            artist={concert.artist}
+            venue={concert.venue}
+            city={concert.city}
+            date={concert.date}
+            rating={concert.rating}
+            title={concert.title}
+            photo_url={photoByConcert.get(concert.id)}
+          />
+        </Link>
       ))}
     </div>
   );

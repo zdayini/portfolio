@@ -32,3 +32,55 @@ export async function getAllPhotos(): Promise<Photo[]> {
     if (!res.ok) throw new Error('Failed to fetch photos');
     return res.json();
 }
+
+export async function getConcert(id: number): Promise<Concert> {
+    const res = await fetch(`${API_URL}/concerts/${id}`);
+    if (!res.ok) throw new Error('Failed to fetch concert');
+    return res.json();
+}
+
+export async function getConcertPhotos(id: number): Promise<Photo[]> {
+    const res = await fetch(`${API_URL}/concerts/photos/${id}`);
+    if (!res.ok) throw new Error('Failed to fetch photos');
+    return res.json();
+}
+
+export type NewConcert = {
+    artist: string;
+    venue: string;
+    city: string;
+    country: string;
+    date: string;
+    rating?: number;
+    title?: string;
+};
+
+export async function createConcert(data: NewConcert) {
+    const res = await fetch(`${API_URL}/concerts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+
+    });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to create concert');
+    }
+    return res.json();
+}
+
+export async function updateConcert(id: number, data: Partial<NewConcert>) {
+    const res = await fetch(`${API_URL}/concerts/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Failed to update concert');
+    return res.json();
+}
+
+export async function deleteConcert(id: number) {
+    const res = await fetch(`${API_URL}/concerts/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('Failed to delete concert');
+    return res.json();
+}
