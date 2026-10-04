@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { createConcert, updateConcert, getConcert } from '../../lib/api';
 import { concertFormSchema } from '../../lib/schemas';
+import PhotoManager from './PhotoManager';
 
 function ConcertForm() {
     const { id } = useParams();
@@ -39,7 +40,7 @@ function ConcertForm() {
             });
         }
     }, [existing]);
-    
+
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     const mutation = useMutation({
@@ -124,6 +125,7 @@ function ConcertForm() {
                     {mutation.isPending ? 'Saving...' : 'Save'}
                 </button>
             </form>
+            {isEditing && <PhotoManager concertId={Number(id)} />}
         </div>
     );
 }

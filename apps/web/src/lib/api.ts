@@ -84,3 +84,24 @@ export async function deleteConcert(id: number) {
     if (!res.ok) throw new Error('Failed to delete concert');
     return res.json();
 }
+
+export async function uploadPhoto(concertId: number, file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const res = await fetch(`${API_URL}/concerts/${concertId}/photos`, {
+    method: 'POST',
+    body: formData,
+    // no Content-Type header — browser sets the multipart boundary automatically
+  });
+  if (!res.ok) throw new Error('Failed to upload photo');
+  return res.json();
+}
+
+export async function deletePhoto(photoId: number) {
+  const res = await fetch(`${API_URL}/concerts/photos/${photoId}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error('Failed to delete photo');
+  return res.json();
+}
