@@ -6,6 +6,7 @@ import { CreateConcertDto } from './concerts.schema';
 import type { UpdateConcertDto } from './concerts.schema';
 import { concertPhotos } from '../db/schema';
 import { R2Service } from '../media/r2.service';
+import { and } from 'drizzle-orm';
 
 @Injectable()
 export class ConcertsService {
@@ -78,12 +79,12 @@ export class ConcertsService {
         return photo;
     }
 
-    async getPhotos(concert_id: number) {
-        return this.db
-            .select()
-            .from(concertPhotos)
-            .where(eq(concertPhotos.concert_id, concert_id))
-            .orderBy(asc(concertPhotos.sort_order));
+    async getPhotos(concertId: number, includePrivate = false) {
+        const condition = includePrivate
+            ? eq(concertPhotos.concert_id, concertId)
+            : and(eq(concertPhotos.concert_id, concertId), eq(concertPhotos.is_public, true));
+
+        return this.db.select().from(concertPhotos).where(condition).orderBy(asc(concertPhotos.created_at));
     }
 
     async removePhoto(photo_id: number) {

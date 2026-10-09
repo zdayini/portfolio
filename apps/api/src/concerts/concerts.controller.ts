@@ -6,6 +6,8 @@ import type { CreateConcertDto, UpdateConcertDto } from './concerts.schema';
 import { ParseIntPipe } from '@nestjs/common'; // Handling for invalid Id
 import { FileInterceptor } from '@nestjs/platform-express';
 import { R2Service } from '../media/r2.service';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('concerts')
 export class ConcertsController {
@@ -40,11 +42,13 @@ export class ConcertsController {
     }
 
     @Post()
+    @UseGuards(AuthGuard)
     create(@Body(new ZodValidationPipe(createConcertSchema)) dto: CreateConcertDto) {
         return this.concertsService.create(dto);
     }
 
     @Patch(':id')
+    @UseGuards(AuthGuard)
     update(
         @Param('id', ParseIntPipe) id: number,
         @Body(new ZodValidationPipe(UpdateConcertSchema)) dto: UpdateConcertDto,
@@ -53,6 +57,7 @@ export class ConcertsController {
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard)
     remove(@Param('id', ParseIntPipe) id: number) {
         return this.concertsService.remove(id);
     }
@@ -60,6 +65,7 @@ export class ConcertsController {
     //// Photos API
 
     @Post(':id/photos')
+    @UseGuards(AuthGuard)
     @UseInterceptors(FileInterceptor('file'))
     async uploadPhoto(
         @Param('id', ParseIntPipe) id: number,
@@ -76,6 +82,7 @@ export class ConcertsController {
     }
 
     @Delete('photos/:photoId')
+    @UseGuards(AuthGuard)
     removePhoto(@Param('photoId', ParseIntPipe) photoId: number) {
         return this.concertsService.removePhoto(photoId);
     }

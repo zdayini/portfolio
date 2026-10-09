@@ -1,5 +1,10 @@
 const API_URL = 'http://localhost:3000';
 
+function authHeaders(): Record<string, string> {
+    const token = localStorage.getItem('admin_token');
+    return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 export type Concert = {
     id: number;
     artist: string;
@@ -58,7 +63,7 @@ export type NewConcert = {
 export async function createConcert(data: NewConcert) {
     const res = await fetch(`${API_URL}/concerts`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
         body: JSON.stringify(data),
 
     });
@@ -72,7 +77,7 @@ export async function createConcert(data: NewConcert) {
 export async function updateConcert(id: number, data: Partial<NewConcert>) {
     const res = await fetch(`${API_URL}/concerts/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
         body: JSON.stringify(data),
     });
     if (!res.ok) throw new Error('Failed to update concert');
@@ -80,28 +85,44 @@ export async function updateConcert(id: number, data: Partial<NewConcert>) {
 }
 
 export async function deleteConcert(id: number) {
-    const res = await fetch(`${API_URL}/concerts/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_URL}/concerts/${id}`, {
+        method: 'DELETE',
+        headers: { ...authHeaders() },
+    });
     if (!res.ok) throw new Error('Failed to delete concert');
     return res.json();
 }
 
 export async function uploadPhoto(concertId: number, file: File) {
-  const formData = new FormData();
-  formData.append('file', file);
+    const formData = new FormData();
+    formData.append('file', file);
 
-  const res = await fetch(`${API_URL}/concerts/${concertId}/photos`, {
-    method: 'POST',
-    body: formData,
-    // no Content-Type header — browser sets the multipart boundary automatically
-  });
-  if (!res.ok) throw new Error('Failed to upload photo');
-  return res.json();
+    const res = await fetch(`${API_URL}/concerts/${concertId}/photos`, {
+        method: 'POST',
+        headers: { ...authHeaders() },
+        body: formData,
+    });
+    if (!res.ok) throw new Error('Failed to upload photo');
+    return res.json();
 }
 
 export async function deletePhoto(photoId: number) {
-  const res = await fetch(`${API_URL}/concerts/photos/${photoId}`, {
-    method: 'DELETE',
-  });
-  if (!res.ok) throw new Error('Failed to delete photo');
-  return res.json();
+    const res = await fetch(`${API_URL}/concerts/photos/${photoId}`, {
+        method: 'DELETE',
+        headers: { ...authHeaders() },
+    });
+    if (!res.ok) throw new Error('Failed to delete photo');
+    return res.json();
 }
+
+export async function login(password: string): Promise<string> {
+    const res = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+    });
+    if (!res.ok) throw new Error('Wrong password');
+    const { token } = await res.json();
+    return token;
+}
+

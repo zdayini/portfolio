@@ -1,9 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getConcerts, deleteConcert } from '../../lib/api';
 
 function AdminConcerts() {
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
 
     const { data: concerts, isLoading } = useQuery({
         queryKey: ['concerts'],
@@ -21,6 +22,16 @@ function AdminConcerts() {
 
     return (
         <div style={{ padding: '2rem', maxWidth: 900, margin: '0 auto' }}>
+            <button
+                onClick={() => {
+                    localStorage.removeItem('admin_token');
+                    navigate('/admin/login');
+                }}
+                style={{ float: 'right' }}
+            >
+                Log out
+            </button>
+
             <h1>Manage Concerts</h1>
             <Link to="/admin/concerts/new">+ Add Concert</Link>
 
